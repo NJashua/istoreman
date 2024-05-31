@@ -1,0 +1,429 @@
+{
+	"info": {
+		"_postman_id": "8a62b433-628a-4f85-a960-8e18f72f69aa",
+		"name": "InventoryMangement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34381864",
+		"_collection_link": "https://nj3333.postman.co/workspace/NJ-Workspace~cf2d6870-6eb7-4a66-8bd8-f4405262c93b/collection/34381864-8a62b433-628a-4f85-a960-8e18f72f69aa?action=share&source=collection_link&creator=34381864"
+	},
+	"item": [
+		{
+			"name": "TEST",
+			"item": [
+				{
+					"name": "IM search testcase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if the status code is 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Check if the response is a JSON object\r",
+									"pm.test(\"Response is a JSON object\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"// Check if the response contains the products and locations arrays                                                                         \r",
+									"pm.test(\"Response contains products and locations arrays\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('products').that.is.an('array');\r",
+									"    pm.expect(jsonData).to.have.property('locations').that.is.an('array');\r",
+									"});\r",
+									"\r",
+									"// Check if the products array is not empty\r",
+									"pm.test(\"Products array is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"// Check if the locations array is not empty\r",
+									"pm.test(\"Locations array is not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.locations).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"// checking if each product in the products array has specific fields\r",
+									"pm.test(\"Each product has required fields...:)\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.products).to.be.an('array').that.is.not.empty;\r",
+									"    jsonData.products.forEach(function(product){\r",
+									"        pm.expect(product).to.have.property('product_name')\r",
+									"        pm.expect(product).to.have.property('selling_price')\r",
+									"        pm.expect(product).to.have.property('expiry_date')\r",
+									"        pm.expect(product).to.have.property('description')\r",
+									"        pm.expect(product).to.have.property('location_id')\r",
+									"        pm.expect(product).to.have.property('number_of_product_purchased')\r",
+									"        pm.expect(product).to.have.property('reorder_level')\r",
+									"        pm.expect(product).to.have.property('selling_price')\r",
+									"        pm.expect(product).to.have.property('supplier_id')\r",
+									"        pm.expect(product).to.have.property('supplier_name')\r",
+									"        pm.expect(product).to.have.property('supplier_name')\r",
+									"        pm.expect(product).to.have.property('category')\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// check if each location in the locations array has specific fields\r",
+									"pm.test(\"Each location has required fields\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.locations).to.be.an('array').that.is.not.empty;\r",
+									"    jsonData.locations.forEach(function(location){\r",
+									"        pm.expect(location).to.have.property('zone');\r",
+									"        pm.expect(location).to.have.property('aisle');\r",
+									"        pm.expect(location).to.have.property('shelf');\r",
+									"        pm.expect(location).to.have.property('bin');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// checking if location instructions are present or not when both product and locations are availabale...:)\r",
+									"pm.test(\"Location instructions are present when applicable\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    if(jsonData.products.length >0 && jsonData.location.length>0){\r",
+									"        pm.expect(jsonData).to.have.property('location').that.is.a('string').that.is.not.empty;\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Handles invalid input gracefully\", function () {\r",
+									"    pm.sendRequest({\r",
+									"        url: \"http://127.0.0.1:5000/search?search_term=invalidinput\",\r",
+									"        method: \"GET\"\r",
+									"    }, function (err, res) {\r",
+									"        // Check if the response was received\r",
+									"        pm.expect(res).to.have.property('code', 200);\r",
+									"        \r",
+									"        var jsonData = res.json();\r",
+									"        pm.expect(jsonData.products).to.be.an('array').that.is.empty;\r",
+									"        pm.expect(jsonData.locations).to.be.an('array').that.is.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nventory.azurewebsites.net/search?search_term=CoolMaster",
+							"protocol": "https",
+							"host": [
+								"nventory",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "search_term",
+									"value": "CoolMaster"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IM displayproducts testcase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract JSON data from response\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if the status code is 200\r",
+									"pm.test(\"Status code is 200\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Check if the response contains all expected fields for each product\r",
+									"pm.test(\"Response contains all expected fields for each product\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product).to.have.all.keys('supplier_id', 'supplier_name', 'product_name', 'description', 'number_of_product_purchased', 'date_of_purchase', 'category', 'quantity_available', 'unit_cost', 'selling_price', 'reorder_level', 'expiry_date', 'location_id');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product prices are greater than zero\r",
+									"pm.test(\"Product prices are greater than zero\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        var price = parseFloat(product.selling_price);\r",
+									"        pm.expect(price).to.be.above(0);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product descriptions are not too long (maximum length is defined as 5000 characters)\r",
+									"pm.test(\"Product descriptions are not too long (maximum length is 5000 characters)\", function(){\r",
+									"    const maxDescLength = 5000;\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product.description.length).to.be.at.most(maxDescLength);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if all products have non-empty descriptions\r",
+									"pm.test(\"All products have non-empty descriptions\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product.description).to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if all product names are unique\r",
+									"pm.test(\"All product names are unique\", function(){\r",
+									"    var uniqueNames = new Set();\r",
+									"    jsonData.forEach(function(product) {\r",
+									"        pm.expect(uniqueNames.has(product.product_name)).to.be.false;\r",
+									"        uniqueNames.add(product.product_name);\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nventory.azurewebsites.net/display_products",
+							"protocol": "https",
+							"host": [
+								"nventory",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"display_products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "https://nventory.azurewebsites.net/purchase_product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Product purchased successfully\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"purchase_id\": 1,\r\n    \"supplier_id\": 2,\r\n    \"date_of_purchase\": \"2024-05-28T12:00:00Z\",\r\n    \"number_of_product_purchased\": 20,\r\n    \"product_name\": \"HomeTech Supplies\",\r\n    \"category\": \"home appliances\",\r\n    \"reorder_level\": 20,\r\n    \"unit_cost\": 700,\r\n    \"location_id\": 2,\r\n    \"expiry_date\": null,\r\n    \"selling_price\": 999.99,\r\n    \"quantity_available\": 20,\r\n    \"description\": \"Smart refrigerator with WiFi connectivity\",\r\n    \"supplier_name\": \"HomeTech Supplies\",\r\n    \"aisle\": \"B1\",\r\n    \"shelf\": \"S1\",\r\n    \"bin\": \"B1\",\r\n    \"zone\": \"Electronics\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/purchase_product",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"purchase_product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "IM Order product testcase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body contains success message\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property(\"Message\", \"Order placed and product quantity updated successfully\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Order created successfully\", function(){\r",
+									"    var data = {\r",
+									"        \"order_id\": 5,\r",
+									"        \"product_name\": \"Gaming Laptop XZ\",\r",
+									"        \"number_shipped\": 1,\r",
+									"        \"order_date\": \"2024-05-28\"\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest({\r",
+									"                url: 'http://127.0.0.1:5000/purchase_product',\r",
+									"        method: 'POST',\r",
+									"        headers: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(data)\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        pm.expect(err).to.be.null;\r",
+									"        pm.expect(res).to.have.property('code', 415);\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "       { \r\n        \"order_id\": 11,\r\n        \"product_name\": \"Apples\",\r\n        \"number_shipped\": 1,\r\n        \"order_date\": \"2024-05-28\"\r\n       }\r\n\r\n       ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/order_product",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"order_product"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AzureTesting",
+			"item": [
+				{
+					"name": "Azure Display_products Testcase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract JSON data from response\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if the status code is 200\r",
+									"pm.test(\"Status code is 200\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Check if the response contains all expected fields for each product\r",
+									"pm.test(\"Response contains all expected fields for each product\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product).to.have.all.keys('supplier_id', 'supplier_name', 'product_name', 'description', 'number_of_product_purchased', 'date_of_purchase', 'category', 'quantity_available', 'unit_cost', 'selling_price', 'reorder_level', 'expiry_date', 'location_id');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product prices are greater than zero\r",
+									"pm.test(\"Product prices are greater than zero\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        var price = parseFloat(product.selling_price);\r",
+									"        pm.expect(price).to.be.above(0);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product descriptions are not too long (maximum length is defined as 5000 characters)\r",
+									"pm.test(\"Product descriptions are not too long (maximum length is 5000 characters)\", function(){\r",
+									"    const maxDescLength = 5000;\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product.description.length).to.be.at.most(maxDescLength);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if all products have non-empty descriptions\r",
+									"pm.test(\"All products have non-empty descriptions\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        pm.expect(product.description).to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if all product names are unique\r",
+									"pm.test(\"All product names are unique\", function(){\r",
+									"    var uniqueNames = new Set();\r",
+									"    jsonData.forEach(function(product) {\r",
+									"        pm.expect(uniqueNames.has(product.product_name)).to.be.false;\r",
+									"        uniqueNames.add(product.product_name);\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://nventory.azurewebsites.net/display_products",
+							"protocol": "https",
+							"host": [
+								"nventory",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"display_products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
