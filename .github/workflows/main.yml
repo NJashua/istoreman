@@ -29,10 +29,13 @@ jobs:
           pip install -r requirements.txt
           pip install pytest  # Ensure pytest is installed
 
+      - name: Debug: List files in repository
+        run: ls -R
+
       - name: Run tests
         run: |
           source venv/bin/activate
-          pytest  # Adjust this command to suit your test framework
+          pytest tests/  # Adjust this path to your tests directory
         shell: /usr/bin/bash -e {0}
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.11.9/x64
