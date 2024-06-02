@@ -27,7 +27,11 @@ jobs:
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+
+      - name: Run tests
+        run: |
+          source venv/bin/activate
+          pytest  # Adjust this command to suit your test framework
 
       - name: Zip artifact for deployment
         run: |
@@ -70,3 +74,11 @@ jobs:
         with:
           app-name: 'Imanagement'
           package: release.zip
+
+      - name: Verify deployment
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ steps.deploy-to-webapp.outputs.webapp-url }})
+          if [ "$response" != "200" ]; then
+            echo "Deployment failed with status code $response"
+            exit 1
+          fi
