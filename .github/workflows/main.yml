@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python version
         uses: actions/setup-python@v4
@@ -29,13 +30,25 @@ jobs:
           pip install -r requirements.txt
           pip install pytest  # Ensure pytest is installed
 
+      - name: Debug: Verify Python and pip versions
+        run: |
+          source venv/bin/activate
+          python --version
+          pip --version
+
       - name: Debug: List files in repository
-        run: ls -R
+        run: |
+          ls -R
+
+      - name: Debug: List installed packages
+        run: |
+          source venv/bin/activate
+          pip list
 
       - name: Run tests
         run: |
           source venv/bin/activate
-          pytest tests/  # Adjust this path to your tests directory
+          pytest --verbose  # Adjust this command to suit your test framework
         shell: /usr/bin/bash -e {0}
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.11.9/x64
