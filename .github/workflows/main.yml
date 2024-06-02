@@ -27,11 +27,20 @@ jobs:
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
+          pip install pytest  # Ensure pytest is installed
 
       - name: Run tests
         run: |
           source venv/bin/activate
           pytest  # Adjust this command to suit your test framework
+        shell: /usr/bin/bash -e {0}
+        env:
+          pythonLocation: /opt/hostedtoolcache/Python/3.11.9/x64
+          PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.9/x64/lib/pkgconfig
+          Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.9/x64
+          Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.9/x64
+          Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.9/x64
+          LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.9/x64/lib
 
       - name: Zip artifact for deployment
         run: |
